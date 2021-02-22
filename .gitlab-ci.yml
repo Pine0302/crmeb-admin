@@ -1,4 +1,4 @@
-image: "centos/nodejs-10-centos7"
+image: "centos/nodejs-12-centos7"
 
 cache:
   paths:
