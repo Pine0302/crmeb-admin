@@ -1,0 +1,33 @@
+image: "centos/nodejs-10-centos7"
+
+cache:
+  paths:
+    - node_modules/
+
+before_script:
+  - npm install --registry=https://registry.npm.taobao.org
+
+stages:
+  - deploy
+
+deploy:
+  stage: deploy
+  only:
+    - master
+  script:
+    - npm run build:prod
+    - mkdir -p ~/.ssh
+    - eval $(ssh-agent -s)
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - echo "$DEPLOY_PUBLIC_KEY" > ~/.ssh/id_rsa.pub
+    - ssh-add <(echo "$DEPLOY_PRIVATE_KEY")
+    - PROJECT_NAMESPACE=$(cut -d'/' -f1 <<<"$PROJECT")
+    - PROJECT_NAME=$(cut -d'/' -f2 <<<"$PROJECT")
+    - mkdir -p build/$PROJECT_NAMESPACE
+    - tar -C /builds/ydb/$PROJECT_NAME/dist --exclude '.git' --exclude 'build' -zcf build/$PROJECT_NAMESPACE/$PROJECT_NAME\.tgz .
+    - ssh root@$HOST "mkdir -p /data/build/$PROJECT_NAMESPACE/"
+    - scp build/$PROJECT_NAMESPACE/$PROJECT_NAME\.tgz root@$HOST:/data/build/$PROJECT_NAMESPACE/$PROJECT_NAME\.tgz
+    - VERSION=$(date +"%Y%m%d%H%m%S")
+    - ssh root@$HOST "mkdir -p /data/docker-projects/gateway/nginx/app-root/src/admin-cunzhangshuo/"
+    - ssh root@$HOST "tar xzf /data/build/$PROJECT_NAMESPACE/$PROJECT_NAME\.tgz -C /data/docker-projects/gateway/nginx/app-root/src/admin-cunzhangshuo/"
+    - ssh root@$HOST "chmod 777 -R /data/docker-projects/gateway/nginx/app-root/src/admin-cunzhangshuo/"
