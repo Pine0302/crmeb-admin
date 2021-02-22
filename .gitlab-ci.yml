@@ -10,7 +10,6 @@ before_script:
   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
   - echo "$DEPLOY_PUBLIC_KEY" > ~/.ssh/id_rsa.pub
   - ssh-add <(echo "$DEPLOY_PRIVATE_KEY")
-  - git config --global url."https://".insteadOf git://
   - npm install --registry=https://registry.npm.taobao.org
 
 stages:
