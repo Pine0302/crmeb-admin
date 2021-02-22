@@ -27,7 +27,7 @@ deploy:
     - mkdir -p build/$PROJECT_NAMESPACE
     - tar -C /builds/$PROJECT_NAMESPACE/$PROJECT_NAME/dist --exclude '.git' --exclude 'build' -zcf build/$PROJECT_NAMESPACE/$PROJECT_NAME\.tgz .
     - ssh root@$HOST "mkdir -p /data/build/$PROJECT_NAMESPACE/"
-    - scp build/$PROJECT_NAMESPACE/$PROJECT_NAME\.tgz root@$HOST:/data/build/$PROJECT_NAMESPACE/$PROJECT_NAME\.tgz
+    - scp build/$PROJECT_NAMESPACE/$PROJECT_NAME\.tgz root@$HOST:/data/build/$PROJECT_NAMESPACE/
     - VERSION=$(date +"%Y%m%d%H%m%S")
     - ssh root@$HOST "mkdir -p /data/docker-projects/gateway/nginx/app-root/src/admin-cunzhangshuo/"
     - ssh root@$HOST "tar xzf /data/build/$PROJECT_NAMESPACE/$PROJECT_NAME\.tgz -C /data/docker-projects/gateway/nginx/app-root/src/admin-cunzhangshuo/"
