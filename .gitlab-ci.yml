@@ -5,6 +5,11 @@ cache:
     - node_modules/
 
 before_script:
+  - mkdir -p ~/.ssh
+  - eval $(ssh-agent -s)
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+  - echo "$DEPLOY_PUBLIC_KEY" > ~/.ssh/id_rsa.pub
+  - ssh-add <(echo "$DEPLOY_PRIVATE_KEY")
   - git config --global url."https://".insteadOf git://
   - npm install --registry=https://registry.npm.taobao.org
 
@@ -17,11 +22,6 @@ deploy:
     - master
   script:
     - npm run build:prod
-    - mkdir -p ~/.ssh
-    - eval $(ssh-agent -s)
-    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-    - echo "$DEPLOY_PUBLIC_KEY" > ~/.ssh/id_rsa.pub
-    - ssh-add <(echo "$DEPLOY_PRIVATE_KEY")
     - PROJECT_NAMESPACE=$(cut -d'/' -f1 <<<"$PROJECT")
     - PROJECT_NAME=$(cut -d'/' -f2 <<<"$PROJECT")
     - mkdir -p build/$PROJECT_NAMESPACE
