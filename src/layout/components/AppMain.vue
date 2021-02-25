@@ -17,27 +17,6 @@ export default {
   name: 'AppMain',
   data () {
     return {
-      links: [
-        {
-          title: '官网',
-          key: '1',
-          href: 'https://www.crmeb.com',
-          blankTarget: true
-        },
-        {
-          title: '社区',
-          key: '2',
-          href: 'http://bbs.crmeb.net',
-          blankTarget: true
-        },
-        {
-          title: '文档',
-          key: '3',
-          href: 'https://help.crmeb.net',
-          blankTarget: true
-        }
-      ],
-      copyright: 'Copyright © 2020 西安众邦网络科技有限公司'
     }
   },
   computed: {
