@@ -1,14 +1,6 @@
 <template>
   <div class="page-account" :style="backgroundImages ? { backgroundImage: 'url(' + backgroundImages + ')'} : { backgroundImage: 'url(' + backgroundImageMo + ')'}">
-    <div class="container" :class="[ fullWidth > 768 ? 'containerSamll':'containerBig']">
-      <template v-if="fullWidth>768">
-        <swiper :options="swiperOption" class="swiperPross">
-          <swiper-slide v-for="(item,index) in swiperList" :key="index" class="swiperPic">
-            <img :src="item.pic">
-          </swiper-slide>
-          <div slot="pagination" class="swiper-pagination" />
-        </swiper>
-      </template>
+    <div class="container" :class="['containerBig']">
       <div class="index_from page-account-container">
         <div class="page-account-top ">
           <div class="page-account-top-logo">
